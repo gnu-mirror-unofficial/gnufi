@@ -1,0 +1,120 @@
+<html lang="en">
+<head>
+<title>internals-protocols-varstore - gnufi</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="gnufi">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="internals_002dprotocols.html#internals_002dprotocols" title="internals-protocols">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<p>
+<a name="internals-protocols-varstore"></a>
+<a name="internals_002dprotocols_002dvarstore"></a>
+Up:&nbsp;<a rel="up" accesskey="u" href="internals_002dprotocols.html#internals_002dprotocols">internals-protocols</a>
+<hr>
+</div>
+
+<h4 class="subsection">6.3.1 Variable Store</h4>
+
+<p>The internal `<samp><span class="samp">variable store</span></samp>' protocol is used to provide storage
+for variables that can be accessed through the runtime services.  The
+protocol exposes characteristics of the store along with a set of
+functions used to read, clear and update the contents of the store. 
+The store is divided into a number of banks, where each bank can be
+read and updated individually.
+
+<h5 class="subsubsection">6.3.1.1 Interface</h5>
+
+<p>The interface provided by the `<samp><span class="samp">variable store</span></samp>' protocol has the
+following functions and variables:
+
+<div class="defun">
+&mdash; Variable Store: efi_uint32_t <b>revision</b><var><a name="index-revision-47"></a></var><br>
+<blockquote><p>Revision of the interface, should be
+<code>EFI_VARIABLE_STORE_PROTOCOL_REVISION</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable Store: efi_uint32_t <b>attributes</b><var><a name="index-attributes-48"></a></var><br>
+<blockquote><p>Attributes of the store.  See related defintions below for a list
+of available attributes. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable Store: efi_uint_t <b>bank_size</b><var><a name="index-bank_005fsize-49"></a></var><br>
+<blockquote><p>Size in bytes of each bank in the store. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable Store: efi_uint_t <b>num_banks</b><var><a name="index-num_005fbanks-50"></a></var><br>
+<blockquote><p>Number of banks that the store presents. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable Store: efi_status_t <b>read</b> (<var>efi_variable_store_t *this, efi_uint_t bank, void *buffer</var>)<var><a name="index-read-51"></a></var><br>
+<blockquote><p>Read the content of bank <var>bank</var> into buffer <var>buffer</var>.  The
+buffer must at least be able to hold the amount of data that the store
+defines for a bank. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable Store: efi_status_t <b>update</b> (<var>efi_variable_store_t *this, efi_uint_t bank, void *buffer</var>)<var><a name="index-update-52"></a></var><br>
+<blockquote><p>Update the content of bank <var>bank</var> with the data in buffer
+<var>buffer</var>.  The buffer msut at least hold the amount of data that
+the store defined for a bank. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Variable Store: efi_status_t <b>clear</b> (<var>efi_variable_store_t *this, efi_uint_t bank</var>)<var><a name="index-clear-53"></a></var><br>
+<blockquote><p>Reset content of bank <var>bank</var>. 
+</p></blockquote></div>
+
+<h5 class="subsubsection">6.3.1.2 Related Definitions</h5>
+
+<p><a name="index-EFI_005fVARIABLE_005fSTORE_005fGUID-54"></a>
+<pre class="smallexample">     #define EFI_VARIABLE_STORE_GUID (efi_guid_t) 		\
+       { 0xdfc23a79, 0xd3f9, 0x4a0e,   			\
+         { 0xac, 0xcb, 0x7f, 0x11, 0xf1, 0x53, 0xf2, 0xa7 }  \
+       }
+</pre>
+   <p>The protocol interface contains an <var>attributes</var> variable that
+defines under what situations the store can be used;
+
+     <dl>
+<dt><code>EFI_VARIABLE_STORE_NONVOLATILE</code><dd><a name="index-EFI_005fVARIABLE_005fSTORE_005fNONVOLATILE-55"></a>The store provides nonvolatile storage.  Variables will survive a
+power-cycle.
+
+     <br><dt><code>EFI_VARIABLE_STORE_BOOT_SERVICE</code><dd><a name="index-EFI_005fVARIABLE_005fSTORE_005fBOOT_005fSERVICE-56"></a>The store is only available while the boot services are still
+running.
+
+     <br><dt><code>EFI_VARIABLE_STORE_RUNTIME</code><dd><a name="index-EFI_005fVARIABLE_005fSTORE_005fRUNTIME-57"></a>The store is available in runtime mode; i.e, after boot services has
+been terminated. 
+</dl>
+
+   <p>The protocol interface contains a revision member that defines the
+version of the interface.  All future versions of the interface will
+be compatible.  If non-compatible changes have to be introduced, a new
+guid will be allocated for the protocol.
+
+     <dl>
+<dt><code>EFI_VARIABLE_STORE_PROTOCOL_REVISION</code><dd><a name="index-EFI_005fVARIABLE_005fSTORE_005fPROTOCOL_005fREVISION-58"></a>Protocol interface revision. 
+</dl>
+
+<!--  -->
+</body></html>
+

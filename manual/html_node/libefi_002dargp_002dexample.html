@@ -1,0 +1,89 @@
+<html lang="en">
+<head>
+<title>libefi-argp-example - gnufi</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="gnufi">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="libefi_002dargp.html#libefi_002dargp" title="libefi-argp">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<p>
+<a name="libefi-argp-example"></a>
+<a name="libefi_002dargp_002dexample"></a>
+Up:&nbsp;<a rel="up" accesskey="u" href="libefi_002dargp.html#libefi_002dargp">libefi-argp</a>
+<hr>
+</div>
+
+<h5 class="subsubsection">5.1.4.1 Example usage of efi_argp_parse</h5>
+
+<p>The small example below shows a program that accepts two options:
+<samp><span class="option">--count</span></samp> and <samp><span class="option">--verbose</span></samp>, with short versions
+<samp><span class="option">-c</span></samp> and <samp><span class="option">-v</span></samp> respectively.
+
+<pre class="smallexample">     static efi_argp_option_t options = []
+       {
+         { L"count", 'c', 0, 0, L"Forward direction", L"NUM" },
+         { L"verbose", 'v', 0, 0, L"Verbose output", NULL },
+         { 0, 0, 0, 't', L"Text to display", L"TEXT" },
+         { 0, 0, 0, 0, 0, 0 }
+       };
+     
+     int count = 10;
+     int verbose = 0;
+     efi_char16_t *text = NULL;
+     
+     static efi_status_t
+     parse (void *data, efi_argp_option_t *opt, efi_char16_t *arg)
+     {
+         switch (opt-&gt;shortarg)
+           {
+           case 'c':
+             count = efi_wstrtoul (arg, NULL, 0);
+             break;
+           case 'v':
+             verbose = 1;
+             break;
+           }
+         switch (opt-&gt;key)
+           {
+           case 't':
+             text = arg;
+             break;
+           }
+       return EFI_SUCCESS;
+     }
+     
+     efi_status_t
+     efi_main (efi_handle_t image, int argc, efi_char16_t **argv)
+     {
+       efi_status_t err;
+       int i;
+     
+       err = efi_argp_parse (argc, argv, options, parse, 0);
+       if (err)
+         return err;
+     
+       for (i = 0; i &lt; count; i++)
+         if (verbose)
+           efi_printf (L"%s\n", text);
+     
+       return EFI_SUCCESS;
+     }
+</pre>
+   </body></html>
+

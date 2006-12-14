@@ -1,0 +1,62 @@
+<html lang="en">
+<head>
+<title>Introduction - gnufi</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="gnufi">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<p>
+<a name="Introduction"></a>
+
+<hr>
+</div>
+
+<h2 class="chapter">1 Introduction</h2>
+
+<p><span class="sc">gnufi</span> is a free implementation of the <span class="sc">uefi</span> specification. 
+<span class="sc">uefi</span> defines a set of services and an environment that can be
+used to boot into an operating system.
+
+   <p>The design goals for <span class="sc">gnufi</span> is that is should be (1) portable, (2)
+extendable and (3) specification confirming. To achieve those goals
+the following concepts are introduced:
+
+     <dl>
+<dt>Loaders<dd>At configuration time different firmware loaders can be specified
+(See <a href="Loaders.html#Loaders">Loaders</a>.).  This enables the firmware to be run in different
+pre-existing environments.  An example of a firmware loader could be
+`<samp><span class="samp">i386-legacy</span></samp>'; a loader that loads the firmware in a legacy BIOS
+environment.  Another example loader could be `<samp><span class="samp">ppc-uboot</span></samp>'; a
+loader that loads the firmware using the U-Boot bootloader on a PPC
+architecture.
+
+     <br><dt>Kernel scripts<dd><a name="index-kscript-1"></a>Per-board configuration scripts, called kernel scripts or simply
+kscripts, are used to enable the user to select what services to
+include in a firmware image, and how to connect those services to
+devices.  The kscripts are also used to setup fall-back console I/O in
+case that the boot manager can not initialize the preferred console.
+
+     <br><dt>Modules<dd>Most services are implemented as modules, this enables the user of the
+firmware to pick with great detail what services he or she requires
+for their environment. 
+</dl>
+
+<!--  -->
+</body></html>
+

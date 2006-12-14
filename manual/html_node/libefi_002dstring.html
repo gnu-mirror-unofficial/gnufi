@@ -1,0 +1,72 @@
+<html lang="en">
+<head>
+<title>libefi-string - gnufi</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="gnufi">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="libefi.html#libefi" title="libefi">
+<link rel="prev" href="libefi_002ddevicepath.html#libefi_002ddevicepath" title="libefi-devicepath">
+<link rel="next" href="libefi_002dargp.html#libefi_002dargp" title="libefi-argp">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<p>
+<a name="libefi-string"></a>
+<a name="libefi_002dstring"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="libefi_002dargp.html#libefi_002dargp">libefi-argp</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="libefi_002ddevicepath.html#libefi_002ddevicepath">libefi-devicepath</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="libefi.html#libefi">libefi</a>
+<hr>
+</div>
+
+<h4 class="subsection">5.1.3 String Functions</h4>
+
+<div class="defun">
+&mdash; Function: efi_int_t <b>efi_wstrcmp</b> (<var>efi_char16_t *s1, efi_char16_t *s2</var>)<var><a name="index-efi_005fwstrcmp-12"></a></var><br>
+<blockquote><p>Compare unicode strings <var>s1</var> and <var>s2</var> and return the difference. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: efi_int_t <b>efi_wstrncmp</b> (<var>efi_char16_t *s1, efi_char16_t *s2, efi_uint_t n</var>)<var><a name="index-efi_005fwstrncmp-13"></a></var><br>
+<blockquote><p>Compare unicode strings <var>s1</var> and <var>S2</var>, and return the difference.  Only
+compare <var>n</var> number of characters. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: efi_int_t <b>efi_wstricmp</b> (<var>efi_char16_t *s1, efi_char16_t *s2</var>)<var><a name="index-efi_005fwstricmp-14"></a></var><br>
+<blockquote><p>Compare strings and return the difference, independent of case. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: efi_char16_t* <b>efi_wstrcpy</b> (<var>efi_char16_t *d, efi_char16_t *s</var>)<var><a name="index-efi_005fwstrcpy-15"></a></var><br>
+<blockquote><p>Copy string specified by <var>s</var> to the memory buffer pointed to by <var>d</var>. 
+Return <var>d</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: efi_char16_t* <b>efi_wstrncpy</b> (<var>efi_char16_t *dst, const efi_char16_t *src, efi_uint_t size</var>)<var><a name="index-efi_005fwstrncpy-16"></a></var><br>
+<blockquote><p>Copy <var>size</var> characters from string <var>src</var> to string buffer <var>dst</var>. 
+Return <var>dst</var>
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: efi_uint_t <b>efi_wstrlen</b> (<var>efi_char16_t *s</var>)<var><a name="index-efi_005fwstrlen-17"></a></var><br>
+<blockquote><p>Return length of given string <var>s</var>. 
+</p></blockquote></div>
+
+   </body></html>
+

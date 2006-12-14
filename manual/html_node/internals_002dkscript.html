@@ -1,0 +1,103 @@
+<html lang="en">
+<head>
+<title>internals-kscript - gnufi</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="gnufi">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Internals.html#Internals" title="Internals">
+<link rel="prev" href="internals_002dmm.html#internals_002dmm" title="internals-mm">
+<link rel="next" href="internals_002dprotocols.html#internals_002dprotocols" title="internals-protocols">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<p>
+<a name="internals-kscript"></a>
+<a name="internals_002dkscript"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="internals_002dprotocols.html#internals_002dprotocols">internals-protocols</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="internals_002dmm.html#internals_002dmm">internals-mm</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Internals.html#Internals">Internals</a>
+<hr>
+</div>
+
+<h3 class="section">6.2 Kernel Scripts</h3>
+
+<p><a name="index-kscript-42"></a>The kernel script is inlined in binary representation together with
+the <span class="sc">gnufi</span> kernel in the firmware image.  It is up to the
+`<samp><span class="samp">gnufi-mkimage</span></samp>' utility to merge modules and build a kscript
+structure that the loader can later pass to the kernel.
+
+   <p>In binary representation is a kernel script a list of TLV-records,
+in native endianess.  Signature of the kscript generic header;
+
+<pre class="smallexample">     struct efi_kscript
+     {
+       efi_uint16_t type;
+       efi_uint16_t subtype;
+       efi_uint32_t offset;
+     };
+</pre>
+   <p><var>type</var> specifies what kind of script record it is.  The last entry
+must be of type <code>EFI_KSCRIPT_END_TYPE</code>.  <var>subtype</var> is a type
+specific.  <var>offset</var> gives the number of bytes from this script
+record to the next.
+
+     <dl>
+<dt><code>EFI_KSCRIPT_END_TYPE</code><a name="index-EFI_005fKSCRIPT_005fEND_005fTYPE-43"></a><dd>Defines the end of the script. 
+<br><dt><code>EFI_KSCRIPT_LOAD_TYPE</code><a name="index-EFI_005fKSCRIPT_005fLOAD_005fTYPE-44"></a><dd>Load and start a module.  The modules contents is inlined in the
+record.  Also provided is the command line, which will be passed to
+the module as a load option.  Signature of the record:
+
+     <pre class="smallexample">          struct efi_kscript_load
+          {
+            efi_kscript_t header;
+            efi_uint32_t cmdline;
+            efi_uint32_t size;
+            efi_uint8_t data[0];
+          };
+     </pre>
+     <p><var>cmdline</var> is an offset from the record to a NUL-terminated unicode
+string.  <var>size</var> is the length of the module data in bytes. 
+<br><dt><code>EFI_KSCRIPT_CONNECT_TYPE</code><a name="index-EFI_005fKSCRIPT_005fCONNECT_005fTYPE-45"></a><dd>Connect drivers to the device path that is inlined in the record.
+
+     <pre class="smallexample">          struct efi_kscript_connect
+          {
+            efi_kscript_t header;
+            efi_device_path_t path;
+          };
+     </pre>
+     <br><dt><code>EFI_KSCRIPT_SET_TYPE</code><a name="index-EFI_005fKSCRIPT_005fSET_005fTYPE-46"></a><dd>Set variable to point to the handle specified by the inlined device
+path.
+
+     <pre class="smallexample">          struct efi_kscript_set
+          {
+            efi_kscript_t header;
+            efi_device_path_t path;
+          };
+     </pre>
+     <p>The <var>subtype</var> if the generic header specifies what variable is
+to be set.  The following variables are available;
+
+          <ul>
+<li>EFI_KSCRIPT_SET_CONIN_SUBTYPE
+<li>EFI_KSCRIPT_SET_CONOUT_SUBTYPE
+<li>EFI_KSCRIPT_SET_CONERR_SUBTYPE
+</ul>
+
+   </dl>
+
+   </body></html>
+

@@ -1,0 +1,68 @@
+<html lang="en">
+<head>
+<title>libefi-devicepath - gnufi</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="gnufi">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="libefi.html#libefi" title="libefi">
+<link rel="prev" href="libefi_002dprotocol.html#libefi_002dprotocol" title="libefi-protocol">
+<link rel="next" href="libefi_002dstring.html#libefi_002dstring" title="libefi-string">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<p>
+<a name="libefi-devicepath"></a>
+<a name="libefi_002ddevicepath"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="libefi_002dstring.html#libefi_002dstring">libefi-string</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="libefi_002dprotocol.html#libefi_002dprotocol">libefi-protocol</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="libefi.html#libefi">libefi</a>
+<hr>
+</div>
+
+<h4 class="subsection">5.1.2 Device Path Related Functions</h4>
+
+<p>These functions are user to manage device paths in different ways. 
+Most of them are not part of the <span class="sc">uefi</span> interface, but implemented
+as convenience functions in the library.
+
+<div class="defun">
+&mdash; Function: efi_status_t <b>efi_device_path_add_to_handle</b> (<var>efi_handle_t handle, efi_device_path_t *path</var>)<var><a name="index-efi_005fdevice_005fpath_005fadd_005fto_005fhandle-8"></a></var><br>
+<blockquote><p>Add device path specified by <var>path</var> to the device handle <var>HANDLE</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: efi_device_path_t* <b>efi_device_path_get_from_handle</b> (<var>efi_handle_t handle</var>)<var><a name="index-efi_005fdevice_005fpath_005fget_005ffrom_005fhandle-9"></a></var><br>
+<blockquote><p>Return device path for handle specified by <var>handle</var>, or
+<code>NULL</code> in case of error. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: efi_device_path_t* <b>efi_device_path_build</b> (<var>efi_boolean_t free_them, ...</var>)<var><a name="index-efi_005fdevice_005fpath_005fbuild-10"></a></var><br>
+<blockquote><p>Build a device path from a given list of path nodes.  The list is NULL
+terminated.  If <var>free_them</var> is true, release memory for all given
+nodes. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: efi_device_path_t* <b>efi_device_path_iterate</b> (<var>efi_device_path_t **pathp</var>)<var><a name="index-efi_005fdevice_005fpath_005fiterate-11"></a></var><br>
+<blockquote><p>Iterate nodes of the device path.  *<var>pathp</var> should be set to point
+to the path that is to be iterated.  <code>NULL</code> will be returned when
+the end of the path has been reached. 
+</p></blockquote></div>
+
+   </body></html>
+

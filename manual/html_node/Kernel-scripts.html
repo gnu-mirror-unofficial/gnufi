@@ -1,0 +1,79 @@
+<html lang="en">
+<head>
+<title>Kernel scripts - gnufi</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="gnufi">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<p>
+<a name="Kernel-scripts"></a>
+
+<hr>
+</div>
+
+<h2 class="chapter">4 Board Specific Configuration Scripts</h2>
+
+<p><a name="index-kscript-5"></a>Board specific configuration scripts, called kernel scripts or simply
+kscripts, are used to enable the user to select what services to
+include, and how to connect those services to devices.  The scripts
+contain a sequence of operations to perform while starting the
+firmware.  An operation is specified by a single operation command
+word and a set of arguments.  All lines that start with a `<samp><span class="samp">#</span></samp>' are
+treated as comments. The following operations are available:
+
+     <dl>
+<dt><code>load </code><var>MODULE</var><dd>Load and start module specified by <var>MODULE</var>.  The module can
+either be a driver or an application.
+
+     <br><dt><code>connect </code><var>PATH</var><dd>Connect device path specified by <var>PATH</var> to a (or several) suitable
+drivers picked by the firmware.  The last component of the path will
+be recursively connected, meaning that any children that it may create
+will also be connected. 
+<br><dt><code>set </code><var>VARIABLE</var> <var>PATH</var><dd>Set variable <var>VARIABLE</var> to the handle specified by <var>PATH</var>. 
+The following variables are available:
+          <dl>
+<dt><code>stdout</code><dt><code>stderr</code><dd>Sets handles for standard output and standard error output. 
+<br><dt><code>stdin</code><dd>Set handle for standard input. 
+</dl>
+     </dl>
+
+   <p>Below is a complete (bogus) example of a kscript that loads a set of
+modules, connects the PCI IDE controller, which will also connect any
+possible disks that it detects.  After that it will set console
+handles to the first serial console on the PCI ISA bridge.
+
+<pre class="smallexample">     # board kscript: bogus-example.kscript
+     load cpuio-i386.efi
+     load pci-rb+i386t1.efi
+     load pci-bus.efi
+     load pci-ide.efi
+     load disk-io.efi
+     load pci-isa.efi
+     load ser-ns16550.efi
+     # connect IDE controller
+     connect /pciroot(0)/pci(1,1)
+     # connect stdout and stderr
+     set stdout /pciroot(0)/pci(0,1)/acpi(PNP0503,0)
+     set stderr /pciroot(0)/pci(0,1)/acpi(PNP0503,0)
+     # connect stdin
+     set stdin /pciroot(0)/pci(0,1)/acpi(PNP0503,0)
+</pre>
+   <!--  -->
+</body></html>
+

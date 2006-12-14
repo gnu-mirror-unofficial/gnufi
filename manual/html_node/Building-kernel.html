@@ -1,0 +1,58 @@
+<html lang="en">
+<head>
+<title>Building kernel - gnufi</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="gnufi">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Building.html#Building" title="Building">
+<link rel="next" href="Building-image.html#Building-image" title="Building image">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<p>
+<a name="Building-kernel"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="Building-image.html#Building-image">Building image</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Building.html#Building">Building</a>
+<hr>
+</div>
+
+<h3 class="section">2.1 Building The Firmware Kernel</h3>
+
+<p>The <span class="sc">gnufi</span> build system uses a <code>configure</code> script generated
+by <span class="sc">gnu</span> Autoconf.
+
+   <p>Before running the configure script, a firmware kernel loader has to
+be picked. See <a href="Loaders.html#Loaders">Loaders</a>, for a complete list of available loaders. 
+The loader is specified using the <samp><span class="option">--with-loader</span></samp> option to the
+configure script.
+
+   <p><em>Suggestion</em>: Build the firmware in a separate directory from
+the sources.
+
+<pre class="smallexample">     gnufi-0.0$ mkdir build &amp;&amp; cd build
+     gnufi-0.0/build$ ../configure --with-loader=i386-multiboot
+     ...
+     gnufi-0.0/build$ make
+     ...
+     gnufi-0.0/build$
+</pre>
+   <p>The above example configures and builds a firmware kernel suitable to
+be loaded by a multiboot compliant boot loader, such as <span class="sc">gnu</span> GRUB. 
+It also builds a set of runtime modules and a few utilities.
+
+   </body></html>
+

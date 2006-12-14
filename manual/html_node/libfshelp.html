@@ -1,0 +1,124 @@
+<html lang="en">
+<head>
+<title>libfshelp - gnufi</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="gnufi">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Libraries.html#Libraries" title="Libraries">
+<link rel="prev" href="libefi.html#libefi" title="libefi">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<p>
+<a name="libfshelp"></a>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="libefi.html#libefi">libefi</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Libraries.html#Libraries">Libraries</a>
+<hr>
+</div>
+
+<h3 class="section">5.2 libefi-fshelp: File System Help Library</h3>
+
+<p>The `<samp><span class="samp">libefi-fshelp</span></samp>' library can be used by drivers that want to
+implement the `<samp><span class="samp">simple file system</span></samp>' protocol.  The library
+presents a complete interface, but communicates with the file system
+backend through a minimal API.  The interface is defined in the
+<samp><span class="file">gnu/efi/util/fshelp.h</span></samp> header.
+
+   <p>The file system backend defines a type `<samp><span class="samp">efi_fshelp_node_t</span></samp>' that
+represents a node in the file system.  The type is fully opaque to the
+library.  Nodes are reference counted.  The library can at any time
+obtain an extra reference by calling the <code>reference</code> operation on
+the node, or release a reference by invoking <code>release</code>.  It is up
+to the file system implementation to maintain references.
+
+<div class="defun">
+&mdash; Function: efi_status_t <b>efi_fshelp_install_protocol_interface</b> (<var>efi_handle_t controller, efi_fshelp_t *fshelp, struct efi_fshelp_ops *ops</var>)<var><a name="index-efi_005ffshelp_005finstall_005fprotocol_005finterface-29"></a></var><br>
+<blockquote><p>Install all the protocol interfaces that the library defines on the
+controller specified by <var>controller</var>.  <var>fshelp</var> is the fshelp
+instance that will be used through out the lifetime of the protocols. 
+<var>ops</var> is the file system backend operations vector. 
+</p></blockquote></div>
+
+   <p>The <code>efi_fshelp_ops</code> vector contains the following operations:
+
+<div class="defun">
+&mdash; fshelp Operation: efi_status_t <b>mount</b> (<var>efi_fshelp_t *fshelp, efi_fshelp_node_t **root</var>)<var><a name="index-mount-30"></a></var><br>
+<blockquote><p>Try to mount file system and return a reference to node in *<var>root</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; fshelp Operation: void <b>reference</b> (<var>efi_fshelp_node_t *node</var>)<var><a name="index-reference-31"></a></var><br>
+<blockquote><p>Obtain reference to node specified by <var>node</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; fshelp Operation: void <b>release</b> (<var>efi_fshelp_node_t *node</var>)<var><a name="index-release-32"></a></var><br>
+<blockquote><p>Release reference to node specified by <var>node</var>, possible destroy
+it. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; fshelp Operation: efi_status_t <b>getinfo</b> (<var>efi_fshelp_node_t *node, efi_file_info_t *info</var>)<var><a name="index-getinfo-33"></a></var><br>
+<blockquote><p>Retreive information about the node <var>node</var> and store it in the
+buffer specified by <var>info</var>.  The backend may in turn cache the
+information for higher performance. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; fshelp Operation: efi_status_t <b>setinfo</b> (<var>efi_fshelp_node_t *node, efi_file_info_t *info</var>)<var><a name="index-setinfo-34"></a></var><br>
+<blockquote><p>Set information about the node <var>node</var> given the information in
+<var>info</var>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; fshelp Operation: efi_status_t <b>readdir</b> (<var>efi_fshelp_node_t *dir, efi_uint64_t *fpos, efi_fshelp_node_t **nodep, efi_char16_t **namep</var>)<var><a name="index-readdir-35"></a></var><br>
+<blockquote><p>Read a directory entry at the position specified by *<var>fpos</var> from
+node <var>dir</var>.  If no more directory entries could be read, the
+operation should return <code>EFI_NOT_FOUND</code>.  A reference to the node
+in the read directory entry is returned in *<var>nodep</var>, and the name
+of the entry in *<var>namep</var>.  The caller is resposible for releasing
+the reference to *<var>nodep</var> and freeing the memory of *<var>namep</var>. 
+The position *<var>fpos</var> should be updated on a successful read. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; fshelp Operation: efi_status_t <b>read</b> (<var>efi_fshelp_node_t *node, efi_uint64_t fpos, efi_uint_t *size, void *buffer</var>)<var><a name="index-read-36"></a></var><br>
+<blockquote>
+<p>Read data from the node <var>node</var> at position given by <var>fpos</var>. 
+The amount of data to read is determined by *<var>size</var>, which will be
+updated with the actual amount of data read on return.  On return, if
+ *<var>size</var> is zero there is no more data to read.  The data will be
+read into buffer <var>buffer.</var>
+</p></blockquote></div>
+
+   <p>The library also implements a set of helper functions that can be used
+to more easily implement some of the fshelp operations.
+
+<div class="defun">
+&mdash; Function: efi_status_t <b>efi_fshelp_read_helper</b> (<var>efi_fshelp_node_t *node, efi_fshelp_read_hook_t read, void *read_data, efi_uint64_t pos, efi_uint_t *size, void *buffer, efi_fshelp_block_hook_t block, efi_uint64_t filesize, int log2blocksize</var>)<var><a name="index-efi_005ffshelp_005fread_005fhelper-37"></a></var><br>
+<blockquote><p>Read *<var>size</var> bytes from the node <var>node</var> into the buffer
+<var>buffer</var>, beginning with the block <var>pos</var>.  <var>read</var> hook is
+used to read disk blocks. <var>read_data</var> will be passed to the hook
+as the first argument.  <var>block</var> hook is used to translate file
+blocks to disk blocks.  The file is <var>FILESIZE</var> bytes big and the
+blocks have a size of <var>log2blocksize</var> (in log2, units of 512 bytes
+blocks). 
+</p></blockquote></div>
+
+<!--  -->
+</body></html>
+

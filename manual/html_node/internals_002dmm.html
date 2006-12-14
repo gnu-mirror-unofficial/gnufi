@@ -1,0 +1,97 @@
+<html lang="en">
+<head>
+<title>internals-mm - gnufi</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="gnufi">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="Internals.html#Internals" title="Internals">
+<link rel="next" href="internals_002dkscript.html#internals_002dkscript" title="internals-kscript">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<p>
+<a name="internals-mm"></a>
+<a name="internals_002dmm"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="internals_002dkscript.html#internals_002dkscript">internals-kscript</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Internals.html#Internals">Internals</a>
+<hr>
+</div>
+
+<h3 class="section">6.1 Memory Management</h3>
+
+<p>The <span class="sc">gnufi</span> kernel presents a slim memory interface that is used
+both by the loader and by the internals of the kernel itself.
+
+   <p>The loader is responsible to feed memory information to the kernel. 
+It should do this by first allocating a region of the memory to hold
+memory descriptor data.  This is done using the <code>efi_mm_init</code>
+function.  Characteristics and attributes for different memory regions
+are passed to the kernel using the <code>efi_mm_set</code> function.
+
+   <p><em>Note:</em> Characteristics for the memory descriptor region must be
+set manually by the loader.  The kernel does <em>not</em> do that
+itself.  The memory type should be
+<code>EFI_MEMORY_TYPE_RUNTIME_SERVICES_DATA</code>.  The loader should also
+set the memory type to <code>EFI_MEMORY_TYPE_RUNTIME_SERVICES_CODE</code>
+and <code>EFI_MEMORY_TYPE_RUNTIME_SERVICES_DATA</code> for the kernels code
+and data, respectively.
+
+   <p><em>Note:</em> Memory region starting at physical address zero should
+not be passed to the kernel as conventional memory, nor be used as
+memory for the memory descriptors.
+
+<div class="defun">
+&mdash; Function: void <b>efi_mm_init</b> (<var>efi_physical_address_t addr, efi_uint_t size</var>)<var><a name="index-efi_005fmm_005finit-38"></a></var><br>
+<blockquote><p>Initialize memory system.  <var>addr</var> points to the region that will
+be used to manage the memory descriptors.  <var>size</var> gives the size
+of the memory region.  Note that the memory region given to this
+function must be also be reserved using the <code>efi_mm_set</code>
+function. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: efi_status_t <b>efi_mm_set</b> (<var>efi_physical_address_t start, efi_physical_address_t end, efi_memory_type_t memory_type, efi_uint64_t attributes</var>)<var><a name="index-efi_005fmm_005fset-39"></a></var><br>
+<blockquote><p>Set memory type of specified range to memory type given in
+<var>memory_type</var>.  The region is specified by <var>start</var> and
+<var>end</var>. 
+</p></blockquote></div>
+
+   <p>The <code>efi_mm_alloc</code> function can be used to locate a region of
+memory that is suitable for allocation, given the specified allocation
+type.  The caller is self responsible for changing memory type for the
+resulting region.
+
+<div class="defun">
+&mdash; Function: efi_status_t <b>efi_mm_alloc</b> (<var>efi_allocate_type_t allocate_type, efi_uint_t num_pages, efi_physical_address_t *memory</var>)<var><a name="index-efi_005fmm_005falloc-40"></a></var><br>
+<blockquote><p>Locate a suitable memory range for a memory allocation specified by
+<var>allocate_type</var>.  <var>num_pages</var> gives the size of the requested
+memory. 
+</p></blockquote></div>
+
+   <p>The <span class="sc">uefi</span> specification mandates the changes to the memory
+descriptor database must be recorded, so that it may be noted if the
+database has been altered between two points.  This is done using a
+&ldquo;generation counter&rdquo; that is increased when an alteration is done to
+the database.
+
+<div class="defun">
+&mdash; Variable: efi_uint_t <b>efi_mm_key</b><var><a name="index-efi_005fmm_005fkey-41"></a></var><br>
+<blockquote><p>Memory key.  Updated everytime the memory descriptor database is altered. 
+</p></blockquote></div>
+
+   </body></html>
+

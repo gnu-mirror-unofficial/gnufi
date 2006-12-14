@@ -1,0 +1,74 @@
+<html lang="en">
+<head>
+<title>libefi-mm - gnufi</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="gnufi">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="libefi.html#libefi" title="libefi">
+<link rel="prev" href="libefi_002dargp.html#libefi_002dargp" title="libefi-argp">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<p>
+<a name="libefi-mm"></a>
+<a name="libefi_002dmm"></a>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="libefi_002dargp.html#libefi_002dargp">libefi-argp</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="libefi.html#libefi">libefi</a>
+<hr>
+</div>
+
+<h4 class="subsection">5.1.5 Memory Management</h4>
+
+<p>Besides the functions that the <span class="sc">uefi</span> makes available for memory
+management, the `<samp><span class="samp">efi</span></samp>' library provides a set of convenience
+functions to make it easier to allocate and free memory.
+
+   <p>To allocate pooled memory the <code>efi_malloc</code> function can be used. 
+The difference from <code>efi_allocate_pool</code> is that <code>efi_malloc</code>
+returns a pointer to the allocated memory.  Memory allocated with
+<code>efi_malloc</code> is like any other pooled memory freed with
+<code>efi_free_pool</code>.
+
+<div class="defun">
+&mdash; Function: void* <b>efi_malloc</b> (<var>efi_memory_type_t type, efi_uint_t size</var>)<var><a name="index-efi_005fmalloc-26"></a></var><br>
+<blockquote><p>Allocate <var>size</var> bytes of pooled memory from memory pool specified
+by <var>type</var>.  Return pointer to allocated memory, or <code>NULL</code> if
+memory could not be allocated. 
+</p></blockquote></div>
+
+   <p>The <code>efi_palloc</code> and <code>efi_pfree</code> functions operate on
+<i>page memory</i>, meaning that the handle non-pooled memory. 
+<code>efi_palloc</code> allocates memory and sets it to a specified memory
+type, using the given allocation scheme.  <code>efi_pfree</code> releases
+memory allocated with either <code>efi_palloc</code> or
+<code>efi_allocate_pages</code>.
+
+<div class="defun">
+&mdash; Function: void* <b>efi_palloc</b> (<var>efi_allocate_type_t allocate_type, efi_memory_type_t mt, efi_uint_t size</var>)<var><a name="index-efi_005fpalloc-27"></a></var><br>
+<blockquote><p>Allocate memory using allocation scheme <var>allocate_type</var> and memory
+type <var>mt</var>.  Allocate <var>size</var> bytes of memory. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: void <b>efi_pfree</b> (<var>void *p, efi_uint_t size</var>)<var><a name="index-efi_005fpfree-28"></a></var><br>
+<blockquote><p>Free pages pointed to by <var>p</var>.  <var>size</var> is the number of bytes
+allocated. 
+</p></blockquote></div>
+
+<!--  -->
+</body></html>
+

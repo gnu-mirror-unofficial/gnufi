@@ -1,0 +1,52 @@
+<html lang="en">
+<head>
+<title>libefi-protocol - gnufi</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="gnufi">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="libefi.html#libefi" title="libefi">
+<link rel="next" href="libefi_002ddevicepath.html#libefi_002ddevicepath" title="libefi-devicepath">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<p>
+<a name="libefi-protocol"></a>
+<a name="libefi_002dprotocol"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="libefi_002ddevicepath.html#libefi_002ddevicepath">libefi-devicepath</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="libefi.html#libefi">libefi</a>
+<hr>
+</div>
+
+<h4 class="subsection">5.1.1 Protocol Interface Related Functions</h4>
+
+<p>TODO: overall description
+
+<div class="defun">
+&mdash; Function: efi_status_t <b>efi_install_protocol_interface</b> (<var>efi_handle_t *handle, efi_guid_t *guid, efi_interface_type_t type, void *interface</var>)<var><a name="index-efi_005finstall_005fprotocol_005finterface-6"></a></var><br>
+<blockquote><p>Attach a protocol interface to handle *<var>handle</var>.  The protocol is
+identified by <var>guid</var>.  If *<var>handle</var> is <code>NULL</code>, a new
+handle will be allocated and returned. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; Function: efi_status_t <b>efi_uninstall_protocol_interface</b> (<var>efi_handle_t handle, efi_guid_t *guid, void *interface</var>)<var><a name="index-efi_005funinstall_005fprotocol_005finterface-7"></a></var><br>
+<blockquote><p>Uninstall a protocol instance.  If this was the last protocol
+associated with the handle, the handle will be destroyed. 
+</p></blockquote></div>
+
+   </body></html>
+

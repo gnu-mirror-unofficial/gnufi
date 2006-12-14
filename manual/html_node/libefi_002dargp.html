@@ -1,0 +1,122 @@
+<html lang="en">
+<head>
+<title>libefi-argp - gnufi</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="gnufi">
+<meta name="generator" content="makeinfo 4.8">
+<link title="Top" rel="start" href="index.html#Top">
+<link rel="up" href="libefi.html#libefi" title="libefi">
+<link rel="prev" href="libefi_002dstring.html#libefi_002dstring" title="libefi-string">
+<link rel="next" href="libefi_002dmm.html#libefi_002dmm" title="libefi-mm">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+--></style>
+</head>
+<body>
+<div class="node">
+<p>
+<a name="libefi-argp"></a>
+<a name="libefi_002dargp"></a>
+Next:&nbsp;<a rel="next" accesskey="n" href="libefi_002dmm.html#libefi_002dmm">libefi-mm</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="libefi_002dstring.html#libefi_002dstring">libefi-string</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="libefi.html#libefi">libefi</a>
+<hr>
+</div>
+
+<h4 class="subsection">5.1.4 Parsing of Options</h4>
+
+<ul class="menu">
+<li><a accesskey="1" href="libefi_002dargp_002dexample.html#libefi_002dargp_002dexample">libefi-argp-example</a>:          Example usage of efi_argp_parse. 
+</ul>
+
+<p>The `<samp><span class="samp">efi</span></samp>' library contains functionality for parsing options. 
+The parsing framework is modeled after <code>argp</code> from the <span class="sc">gnu</span> C
+library.  The application defines a list of valid options, and pass
+them together with a parse hook to the <code>efi_argp_parse</code> method. 
+The hook will get invoked during the parsing with information about
+what option was just parsed.  Definitions and prototypes is available
+in <samp><span class="file">gnu/efi/util/argp.h</span></samp>.
+
+   <p>The options is defined as a NULL terminated array of <code>efi_argp_option_t</code>
+structures.  The <code>efi_argp_option_t</code> structure has the following
+members:
+
+<div class="defun">
+&mdash; argp Option: efi_char16_t* <b>longarg</b><var><a name="index-longarg-18"></a></var><br>
+<blockquote><p>Long argument name of the option, if any.  Long arguments are
+argumnets that start with `<samp><span class="samp">--</span></samp>'.  For example <samp><span class="option">--output</span></samp>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; argp Option: int <b>shortarg</b><var><a name="index-shortarg-19"></a></var><br>
+<blockquote><p>Short argument name of the option, if any.  Short argument are
+arguments that start with `<samp><span class="samp">-</span></samp>'.  For example <samp><span class="option">-o</span></samp>. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; argp Option: int <b>flags</b><var><a name="index-flags-20"></a></var><br>
+<blockquote><p>Option flags.  The only flag currently available is
+<code>EFI_ARGP_ARG_OPTIONAL</code> which defines that the option takes an
+optional argument. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; argp Option: int <b>key</b><var><a name="index-key-21"></a></var><br>
+<blockquote><p>A key that can be used by the parser hook to identify the option. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; argp Option: efi_char16_t* <b>doc</b><var><a name="index-doc-22"></a></var><br>
+<blockquote><p>A documentation string that describes the option.  Mandatory. 
+</p></blockquote></div>
+
+<div class="defun">
+&mdash; argp Option: efi_char16_t* <b>arg</b><var><a name="index-arg-23"></a></var><br>
+<blockquote><p>Name of the argument that the option takes.  Should be in uppercase. 
+</p></blockquote></div>
+
+   <p>FIXME:
+If neither <var>longarg</var> nor <var>shortarg</var> is specified in the option
+is treated as an mandatory argument to the program.  If no option is
+defined for the program argument, the hook will be invoked with
+<var>opt</var> as NULL but a valid <var>arg</var> argument.
+
+   <p>FIXME: When all options has been parsed the parser will invoke the
+hook with <var>opt</var> and <var>arg</var> set to NULL to signal that all
+options has been parsed.
+
+   <p>The signature of the hook:
+
+<div class="defun">
+&mdash; Function: efi_status_t <b>efi_argp_parse_hook_t</b> (<var>void *data, efi_argp_option_t *opt, efi_char16_t *arg</var>)<var><a name="index-efi_005fargp_005fparse_005fhook_005ft-24"></a></var><br>
+<blockquote><p>Parse hook invoked from the option parser.  <var>DATA</var> is a user
+defined pointer that was provided to <var>efi_argp_parse</var>.  <var>opt</var>
+is the option that was pased, and <var>arg</var> is an optional argument to
+the option.  The hook should return <code>EFI_SUCCESS</code> if it could
+handle the option. 
+</p></blockquote></div>
+
+   <p><em>Caution:</em> The option parser uses the first argument passed to
+<code>efi_argp_parse</code> as the program name.
+
+<div class="defun">
+&mdash; Function: efi_status_t <b>efi_argp_parse</b> (<var>int argc, efi_char16_t **argv, efi_argp_option_t *options, efi_argp_parse_hook_t hook, void *data</var>)<var><a name="index-efi_005fargp_005fparse-25"></a></var><br>
+<blockquote><p>Parse options and invoke hook <var>hook</var> with the parsed option. 
+<var>options</var> is a list of options that should be parsed.  <var>argc</var>
+is the number of arguments passed to the program.  <var>argv</var> is an
+array of all arguments.  <var>data</var> is a user defined pointer that
+will be passed to the hook. 
+</p></blockquote></div>
+
+   </body></html>
+
